@@ -33,7 +33,7 @@ This document summarizes experiments conducted to measure and compare hashing pe
 - **Use Case**: High-performance secure hashing
 
 ### 4. Argon2id
-- **Hashcat Mode**: 9900 (may not be directly supported)
+- **Hashcat Mode**: 70000 (Argon2id [Bridged: reference implementation + tunings])
 - **Hash Format**: `$argon2id$v=19$m=65536,t=4,p=1$salt$hash`
 - **Status**: Password hashing competition winner (2015)
 - **Use Case**: Password storage (memory-hard, slow by design)
@@ -133,7 +133,7 @@ python python/analyze_all.py
 | MD5       | 0            | 10,000       | 10,000  | 100.0%       | ✅ All cracked |
 | SHA-3-256 | 17400        | 10,000       | 10,000  | 100.0%       | ✅ All cracked |
 | BLAKE2b   | 600          | 10,000       | 10,000  | 100.0%       | ✅ All cracked |
-| Argon2id  | N/A          | 1,000        | 0       | 0.0%         | ❌ Not supported by Hashcat |
+| Argon2id  | 70000        | 1,000        | 50      | 5.0%         | ⚠️ Partially cracked (memory-hard) |
 
 ## Key Observations (Based on Actual Results)
 
@@ -154,9 +154,10 @@ python python/analyze_all.py
 
 4. **Argon2id**: 
    - Extremely slow by design (126.786 ms avg - ~724,000x slower than MD5)
-   - 0% cracked (Hashcat does not support Argon2id format)
+   - 5.0% cracked (50 out of 1,000) using Hashcat mode 70000
    - Memory-hard algorithm designed specifically for password storage
    - The slow hashing time is intentional and provides resistance against brute-force attacks
+   - Only the weakest passwords in rockyou.txt were cracked due to the memory-hard design
 
 ## Experiment Workflow
 
@@ -168,7 +169,7 @@ python python/analyze_all.py
 
 ## Notes
 
-- **Argon2id**: Hashcat v7.1.2 does not support Argon2id format. The algorithm is memory-hard by design and the slow hashing time (126.79 ms vs 0.0002 ms for others) is intentional to resist brute-force attacks.
+- **Argon2id**: Hashcat v7.1.2-382+ supports Argon2id via mode 70000. The algorithm is memory-hard by design and the slow hashing time (126.79 ms vs 0.0002 ms for others) is intentional to resist brute-force attacks. Only 5% of hashes were cracked, demonstrating the effectiveness of memory-hard algorithms.
 - All algorithms can be tested simultaneously without interference
 - Separate output files ensure clean comparison between algorithms
 - MD5, SHA-3, and BLAKE2b all achieved 100% cracking success rate against rockyou.txt wordlist

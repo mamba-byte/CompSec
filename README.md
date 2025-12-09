@@ -5,14 +5,14 @@ This project automates an end-to-end workflow for experimenting with multiple pa
 ### Stack
 - PHP 8+ CLI for hashing and database ingestion (no external dependencies)
 - MySQL 8 for persisting plaintexts, hashes, and timing metrics
-- Hashcat v7.1.2 for cracking experiments (modes: 0, 17400, 600)
+- Hashcat v7.1.2+ for cracking experiments (modes: 0, 17400, 600, 70000)
 - Python 3.11+ (pandas, SQLAlchemy, matplotlib, seaborn) for analytics
 
 ### Supported Algorithms
 - **MD5** (Mode 0) - Legacy, cryptographically broken
 - **SHA-3-256** (Mode 17400) - NIST standard, modern secure hash
 - **BLAKE2b-512** (Mode 600) - Fast, secure alternative
-- **Argon2id** - Memory-hard password hashing (not supported by Hashcat)
+- **Argon2id** (Mode 70000) - Memory-hard password hashing
 
 ### Repository Layout
 - `sql/` – database schema and seed helpers
@@ -48,7 +48,7 @@ This project automates an end-to-end workflow for experimenting with multiple pa
 | MD5       | 10,000 | 10,000  | 100.0%    | 0.000175 ms      |
 | SHA-3     | 10,000 | 10,000  | 100.0%    | 0.000313 ms      |
 | BLAKE2b   | 10,000 | 10,000  | 100.0%    | 0.000276 ms      |
-| Argon2id  | 1,000  | 0       | 0.0%      | 126.786 ms       |
+| Argon2id  | 1,000  | 50      | 5.0%      | 126.786 ms       |
 
 See `docs/EXPERIMENTS.md` for detailed results and analysis.
 

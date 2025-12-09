@@ -39,7 +39,7 @@ def fetch_data(engine_url: str, hash_type: str) -> tuple[pd.DataFrame, pd.DataFr
     
     # Filter runs by hash mode if possible
     runs = pd.read_sql_table("hashcat_runs", engine)
-    mode_map = {"md5": 0, "sha3": 17400, "blake2b": 600, "argon2id": 9900}
+    mode_map = {"md5": 0, "sha3": 17400, "blake2b": 600, "argon2id": 70000}
     if hash_type in mode_map:
         runs = runs[runs["hash_mode"] == mode_map[hash_type]]
     

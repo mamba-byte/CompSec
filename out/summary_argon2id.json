@@ -2,17 +2,33 @@
   "summary": {
     "hash_type": "ARGON2ID",
     "total_hashes": 1000,
-    "cracked": 0,
-    "cracked_pct": 0.0,
+    "cracked": 50,
+    "cracked_pct": 5.0,
     "avg_php_ms": 126.78628690000001,
     "min_php_ms": 118.8165,
     "max_php_ms": 214.32,
     "median_php_ms": 124.3531,
-    "avg_crack_time_s": 0.0,
-    "latest_run": {}
+    "avg_crack_time_s": 3672.0,
+    "latest_run": {
+      "id": 7,
+      "run_name": "argon2id-crack-20251209-081609",
+      "hash_mode": 70000,
+      "wordlist": "",
+      "hash_file": "hashcat/hashes_argon2id.txt",
+      "options_json": {
+        "potfile": "hashcat/hashcat_argon2id.pot"
+      },
+      "status_json_path": null,
+      "started_at": "2025-12-09 05:16:09",
+      "completed_at": "2025-12-09 05:16:09",
+      "duration_s": NaN,
+      "hashes_total": null,
+      "hashes_cracked": null,
+      "created_at": "2025-12-09 08:16:09"
+    }
   },
   "plots": [
-    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/php_latency_argon2id.png",
-    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/hashcat_crack_times_argon2id.png"
+    "out/plots/php_latency_argon2id.png",
+    "out/plots/hashcat_crack_times_argon2id.png"
   ]
 }

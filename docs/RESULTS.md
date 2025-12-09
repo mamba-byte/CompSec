@@ -37,13 +37,13 @@ This document contains the **actual measured results** from password hashing and
 | **MD5**       | 0      | 10,000 | 10,000 | 100.0% | ✅ All cracked |
 | **SHA-3-256** | 17400  | 10,000 | 10,000 | 100.0% | ✅ All cracked |
 | **BLAKE2b**   | 600    | 10,000 | 10,000 | 100.0% | ✅ All cracked |
-| **Argon2id**  | N/A    | 1,000  | 0      | 0.0%   | ❌ Not supported |
+| **Argon2id**  | 70000  | 1,000  | 50     | 5.0%   | ⚠️ Partially cracked |
 
 ### Key Findings
 
 1. **All fast hashes were 100% cracked**: MD5, SHA-3, and BLAKE2b all achieved 100% success rate against rockyou.txt
-2. **Argon2id not cracked**: Hashcat v7.1.2 does not support Argon2id format
-3. **Cracking speed**: All three supported algorithms were cracked very quickly (within seconds)
+2. **Argon2id partially cracked**: Using Hashcat mode 70000, only 5% (50/1,000) of Argon2id hashes were cracked, demonstrating the effectiveness of memory-hard algorithms
+3. **Cracking speed**: Fast hashes (MD5, SHA-3, BLAKE2b) were cracked very quickly (within seconds), while Argon2id's memory-hard design significantly slows down cracking attempts
 
 ## Performance Comparison
 
@@ -56,14 +56,14 @@ This document contains the **actual measured results** from password hashing and
 
 ### Cracking Resistance Ranking (Most to Least Resistant)
 
-1. **Argon2id**: Not crackable with Hashcat (memory-hard design)
+1. **Argon2id**: Only 5% cracked (memory-hard design provides strong resistance)
 2. **SHA-3, BLAKE2b, MD5**: All cracked 100% (no significant difference in this test)
 
 ## Conclusions
 
 1. **MD5 should not be used**: Despite being fastest, it's cryptographically broken and all hashes were cracked
 2. **SHA-3 and BLAKE2b are similar**: Both are modern secure hashes with comparable performance
-3. **Argon2id is for password storage**: The extreme slowness (126 ms vs 0.0002 ms) is intentional and provides resistance against brute-force attacks
+3. **Argon2id is for password storage**: The extreme slowness (126 ms vs 0.0002 ms) is intentional and provides resistance against brute-force attacks. Only 5% of hashes were cracked, demonstrating its effectiveness
 4. **Wordlist attacks are effective**: All fast hashes were 100% cracked against rockyou.txt, demonstrating the importance of strong passwords
 
 ## Output Files

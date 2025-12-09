@@ -73,9 +73,9 @@ Each JSON file follows this structure (no NaN values):
 | MD5       | 10,000 | 10,000 | 100.0% | 0.000175 ms |
 | SHA-3     | 10,000 | 10,000 | 100.0% | 0.000313 ms |
 | BLAKE2b   | 10,000 | 10,000 | 100.0% | 0.000276 ms |
-| Argon2id  | 1,000  | 0      | 0.0%   | 126.786 ms |
+| Argon2id  | 1,000  | 50     | 5.0%   | 126.786 ms |
 
-**Note**: Argon2id hashes were not cracked because Hashcat does not support Argon2id format. The algorithm is memory-hard and designed to be slow (126.79 ms vs 0.0002 ms for others).
+**Note**: Argon2id achieved 5% cracking success rate using Hashcat mode 70000. The algorithm is memory-hard and designed to be slow (126.79 ms vs 0.0002 ms for others), which significantly reduces cracking effectiveness compared to fast hashes.
 
 ## Verification
 

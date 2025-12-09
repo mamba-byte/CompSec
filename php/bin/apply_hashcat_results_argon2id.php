@@ -33,7 +33,7 @@ $wordlist = $options['wordlist'] ?? 'rockyou.txt';
 $hashFile = $options['hashes'] ?? 'hashcat/hashes_argon2id.txt';
 $statusPath = $options['status'] ?? null;
 $duration = isset($options['duration']) ? (float)$options['duration'] : null;
-$mode = isset($options['mode']) ? (int)$options['mode'] : 9900;
+$mode = isset($options['mode']) ? (int)$options['mode'] : 70000;
 
 $db = Database::fromEnv();
 $now = (new DateTimeImmutable())->format('Y-m-d H:i:s');

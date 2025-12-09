@@ -8,15 +8,13 @@ POTFILE="${POTFILE:-$ROOT/hashcat/hashcat_argon2id.pot}"
 STATUS_JSON="${STATUS_JSON:-$ROOT/hashcat/status_argon2id.json}"
 HASHCAT_BIN="${HASHCAT_BIN:-/opt/homebrew/bin/hashcat}"
 SESSION="${SESSION:-compsec-argon2id}"
-# Note: Argon2id may not be directly supported in Hashcat
-# Check hashcat --help for available Argon2 modes
-HASH_MODE="${HASH_MODE:-9900}"
+# Argon2id is supported in Hashcat mode 70000
+HASH_MODE="${HASH_MODE:-70000}"
 
 mkdir -p "$(dirname "$HASH_FILE")"
 
-echo "Warning: Argon2id may not be directly supported by Hashcat."
-echo "Check available modes with: hashcat --help | grep -i argon"
-echo "Proceeding with mode $HASH_MODE..."
+echo "Starting Argon2id cracking with mode $HASH_MODE..."
+echo "Note: Argon2id is memory-hard and will be very slow to crack."
 
 "$HASHCAT_BIN" \
   --session "$SESSION" \

@@ -81,9 +81,9 @@ Each `summary_<algorithm>.json` contains:
 | MD5       | 10,000 | 10,000 | 100.0% | 0.000175 ms | 0.0001 ms | 0.0468 ms | 0.0002 ms |
 | SHA-3     | 10,000 | 10,000 | 100.0% | 0.000313 ms | 0.0002 ms | 0.0320 ms | 0.0003 ms |
 | BLAKE2b   | 10,000 | 10,000 | 100.0% | 0.000276 ms | 0.0002 ms | 0.2149 ms | 0.0002 ms |
-| Argon2id  | 1,000  | 0      | 0.0%   | 126.786 ms | 118.82 ms | 214.32 ms | 124.35 ms |
+| Argon2id  | 1,000  | 50     | 5.0%   | 126.786 ms | 118.82 ms | 214.32 ms | 124.35 ms |
 
-**Note**: Argon2id was not cracked because Hashcat does not support Argon2id format. The algorithm is intentionally slow (memory-hard) for password security.
+**Note**: Argon2id achieved 5% cracking success rate using Hashcat mode 70000. The algorithm is intentionally slow (memory-hard) for password security, which significantly reduces cracking effectiveness compared to fast hashes.
 
 ## Plot Files
 

@@ -1,0 +1,20 @@
+Monitoring Argon2id cracking progress...
+Target: 50 hashes
+Current count:       41
+Will stop hashcat when 50 hashes are cracked.
+
+Tue Dec  9 08:09:01 +03 2025: Progress:       41/50 hashes (      41 more needed)
+Tue Dec  9 08:09:31 +03 2025: Progress:       42/50 hashes (      42 more needed)
+Tue Dec  9 08:10:01 +03 2025: Progress:       43/50 hashes (      43 more needed)
+Tue Dec  9 08:10:31 +03 2025: Progress:       44/50 hashes (      44 more needed)
+Tue Dec  9 08:11:01 +03 2025: Progress:       44/50 hashes (      44 more needed)
+Tue Dec  9 08:11:31 +03 2025: Progress:       44/50 hashes (      44 more needed)
+Tue Dec  9 08:12:01 +03 2025: Progress:       46/50 hashes (      46 more needed)
+Tue Dec  9 08:12:31 +03 2025: Progress:       46/50 hashes (      46 more needed)
+Tue Dec  9 08:13:01 +03 2025: Progress:       47/50 hashes (      47 more needed)
+Tue Dec  9 08:13:31 +03 2025: Progress:       48/50 hashes (      48 more needed)
+Tue Dec  9 08:14:01 +03 2025: Progress:       49/50 hashes (      49 more needed)
+Tue Dec  9 08:14:31 +03 2025: Target reached! Found       50 hashes (target was 50)
+Stopping hashcat process...
+Hashcat stopped successfully.
+Final count:       50 hashes
