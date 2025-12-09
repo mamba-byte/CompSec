@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require_once __DIR__ . '/../src/Env.php';
+require_once __DIR__ . '/../src/Database.php';
+
+Env::load(__DIR__ . '/../.env');
+Env::load(__DIR__ . '/../env.local');
+
+$options = getopt('', [
+    'pot:',
+    'run-name:',
+    'wordlist::',
+    'hashes::',
+    'status::',
+    'duration::',
+    'mode::',
+]);
+
+foreach (['pot', 'run-name'] as $required) {
+    if (!isset($options[$required])) {
+        fwrite(STDERR, "Usage: apply_hashcat_results_sha3.php --pot hashcat.pot --run-name exp1 [--wordlist rockyou.txt --hashes hashes.txt --duration 123.4 --mode 17400]\n");
+        exit(1);
+    }
+}
+
+$potfile = $options['pot'];
+$runName = $options['run-name'];
+$wordlist = $options['wordlist'] ?? 'rockyou.txt';
+$hashFile = $options['hashes'] ?? 'hashcat/hashes_sha3.txt';
+$statusPath = $options['status'] ?? null;
+$duration = isset($options['duration']) ? (float)$options['duration'] : null;
+$mode = isset($options['mode']) ? (int)$options['mode'] : 17400;
+
+$db = Database::fromEnv();
+$now = (new DateTimeImmutable())->format('Y-m-d H:i:s');
+
+$runId = $db->insertHashcatRun([
+    'run_name' => $runName,
+    'hash_mode' => $mode,
+    'wordlist' => $wordlist,
+    'hash_file' => $hashFile,
+    'options_json' => json_encode(['potfile' => $potfile]),
+    'status_json_path' => $statusPath,
+    'started_at' => $now,
+    'completed_at' => $now,
+    'duration_s' => $duration,
+    'hashes_total' => null,
+    'hashes_cracked' => null,
+]);
+
+$updated = $db->applyPotfileSha3($potfile, $runId, $duration);
+
+fprintf(STDOUT, "Applied SHA-3 potfile %s. Updated %d rows (run id %d).\n", $potfile, $updated, $runId);
+

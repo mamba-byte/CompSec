@@ -1,0 +1,34 @@
+hashcat (v7.1.2) starting - session [compsec-blake2b]
+
+Initializing bridges. Please be patient...Initialized bridgesInitializing backend runtimes. Please be patient...Initialized backend runtimesInitializing backend devices. Please be patient...Initialized backend devicesMinimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Counting lines in hashcat/hashes_blake2b.txt. Please be patient...Counted lines in hashcat/hashes_blake2b.txtParsing Hashes: 1/10000 (0.01%)...Parsed Hashes: 10000/10000 (100.00%)Sorting hashes. Please be patient...Sorted hashesRemoving duplicate hashes. Please be patient...Removed duplicate hashesSorting salts. Please be patient...Sorted saltsComparing hashes with potfile entries. Please be patient...Compared hashes with potfile entriesGenerating bitmap tables...Generated bitmap tablesHashes: 10000 digests; 10000 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Not-Iterated
+* Single-Salt
+* Raw-Hash
+* Uses-64-Bit
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 100c
+
+Initializing bridge salts. Please be patient...Initialized bridge saltsInitializing device kernels and memory. Please be patient...Initializing backend runtime for device #1. Please be patient...Initialized backend runtime for device #1Host memory allocated for this attack: 599 MB (1781 MB free)
+
+Initialized device kernels and memoryStarting self-test. Please be patient...Finished self-testDictionary cache hit:
+* Filename..: rockyou.txt
+* Passwords.: 14344384
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+
+Starting autotune. Please be patient...Finished autotune                                                          [s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit =>                                                           { "session": "compsec-blake2b", "guess": { "guess_base": "rockyou.txt", "guess_base_count": 1, "guess_base_offset": 1, "guess_base_percent": 100.00, "guess_mask_length": 4294967295, "guess_mod": null, "guess_mod_count": 1, "guess_mod_offset": 1, "guess_mod_percent": 100.00, "guess_mode": 1 }, "status": 6, "target": "hashcat/hashes_blake2b.txt", "progress": [327680, 14344384], "restore_point": 0, "recovered_hashes": [10000, 10000], "recovered_salts": [1, 1], "rejected": 0, "devices": [ { "device_id": 1, "device_name": "Apple M3", "device_type": "GPU", "speed": 38062492, "temp": -1, "util": 0, "fanspeed": -1, "corespeed": -1, "memoryspeed": -1, "buslanes": -1, "power": 352 } ], "time_start": 1765237804, "estimated_stop": 1765237805 }
+Started: Tue Dec  9 02:49:55 2025
+Stopped: Tue Dec  9 02:50:05 2025

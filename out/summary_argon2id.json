@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "hash_type": "ARGON2ID",
+    "total_hashes": 1000,
+    "cracked": 0,
+    "cracked_pct": 0.0,
+    "avg_php_ms": 126.78628690000001,
+    "min_php_ms": 118.8165,
+    "max_php_ms": 214.32,
+    "median_php_ms": 124.3531,
+    "avg_crack_time_s": 0.0,
+    "latest_run": {}
+  },
+  "plots": [
+    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/php_latency_argon2id.png",
+    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/hashcat_crack_times_argon2id.png"
+  ]
+}

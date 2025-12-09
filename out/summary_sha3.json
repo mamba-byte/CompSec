@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "hash_type": "SHA3",
+    "total_hashes": 10000,
+    "cracked": 10000,
+    "cracked_pct": 100.0,
+    "avg_php_ms": 0.00031281,
+    "min_php_ms": 0.0002,
+    "max_php_ms": 0.032,
+    "median_php_ms": 0.0003,
+    "avg_crack_time_s": 0.0,
+    "latest_run": {}
+  },
+  "plots": [
+    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/php_latency_sha3.png",
+    "/Users/ismailcandurak/Desktop/Dersler/CompSec/HW/out/plots/hashcat_crack_times_sha3.png"
+  ]
+}

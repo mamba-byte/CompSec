@@ -75,9 +75,105 @@ final class Database
         }
     }
 
+    public function bulkInsertHashesSha3(int $ingestRunId, array $rows): void
+    {
+        $sql = <<<SQL
+            INSERT INTO hashes (ingest_run_id, line_no, plaintext, sha3_hash, php_elapsed_ms)
+            VALUES (:ingest_run_id, :line_no, :plaintext, :sha3_hash, :php_elapsed_ms)
+            ON DUPLICATE KEY UPDATE
+                plaintext = VALUES(plaintext),
+                php_elapsed_ms = VALUES(php_elapsed_ms),
+                updated_at = CURRENT_TIMESTAMP
+        SQL;
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($rows as $row) {
+            $row['ingest_run_id'] = $ingestRunId;
+            $stmt->execute($row);
+        }
+    }
+
     public function fetchHashesForExport(?int $limit = null): array
     {
-        $sql = 'SELECT md5_hash FROM hashes WHERE cracked_at IS NULL';
+        $sql = 'SELECT md5_hash FROM hashes WHERE cracked_at IS NULL AND md5_hash IS NOT NULL';
+        if ($limit !== null) {
+            $sql .= ' ORDER BY id LIMIT :lim';
+        }
+        $stmt = $this->pdo->prepare($sql);
+        if ($limit !== null) {
+            $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function fetchHashesForExportSha3(?int $limit = null): array
+    {
+        $sql = 'SELECT sha3_hash FROM hashes WHERE cracked_at IS NULL AND sha3_hash IS NOT NULL';
+        if ($limit !== null) {
+            $sql .= ' ORDER BY id LIMIT :lim';
+        }
+        $stmt = $this->pdo->prepare($sql);
+        if ($limit !== null) {
+            $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function bulkInsertHashesBlake2b(int $ingestRunId, array $rows): void
+    {
+        $sql = <<<SQL
+            INSERT INTO hashes (ingest_run_id, line_no, plaintext, blake2b_hash, php_elapsed_ms)
+            VALUES (:ingest_run_id, :line_no, :plaintext, :blake2b_hash, :php_elapsed_ms)
+            ON DUPLICATE KEY UPDATE
+                plaintext = VALUES(plaintext),
+                php_elapsed_ms = VALUES(php_elapsed_ms),
+                updated_at = CURRENT_TIMESTAMP
+        SQL;
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($rows as $row) {
+            $row['ingest_run_id'] = $ingestRunId;
+            $stmt->execute($row);
+        }
+    }
+
+    public function bulkInsertHashesArgon2id(int $ingestRunId, array $rows): void
+    {
+        $sql = <<<SQL
+            INSERT INTO hashes (ingest_run_id, line_no, plaintext, argon2id_hash, php_elapsed_ms)
+            VALUES (:ingest_run_id, :line_no, :plaintext, :argon2id_hash, :php_elapsed_ms)
+            ON DUPLICATE KEY UPDATE
+                plaintext = VALUES(plaintext),
+                php_elapsed_ms = VALUES(php_elapsed_ms),
+                updated_at = CURRENT_TIMESTAMP
+        SQL;
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($rows as $row) {
+            $row['ingest_run_id'] = $ingestRunId;
+            $stmt->execute($row);
+        }
+    }
+
+    public function fetchHashesForExportBlake2b(?int $limit = null): array
+    {
+        $sql = 'SELECT blake2b_hash FROM hashes WHERE cracked_at IS NULL AND blake2b_hash IS NOT NULL';
+        if ($limit !== null) {
+            $sql .= ' ORDER BY id LIMIT :lim';
+        }
+        $stmt = $this->pdo->prepare($sql);
+        if ($limit !== null) {
+            $stmt->bindValue(':lim', $limit, PDO::PARAM_INT);
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    public function fetchHashesForExportArgon2id(?int $limit = null): array
+    {
+        $sql = 'SELECT argon2id_hash FROM hashes WHERE cracked_at IS NULL AND argon2id_hash IS NOT NULL';
         if ($limit !== null) {
             $sql .= ' ORDER BY id LIMIT :lim';
         }
@@ -120,6 +216,125 @@ final class Database
                 crack_time_s = COALESCE(crack_time_s, :crack_time_s),
                 crack_plaintext = :plaintext
             WHERE md5_hash = :hash
+        SQL;
+        $stmt = $this->pdo->prepare($updateSql);
+        $updated = 0;
+
+        foreach ($lines as $line) {
+            [$hash, $plaintext] = array_pad(explode(':', $line, 2), 2, '');
+            if ($hash === '') {
+                continue;
+            }
+            $stmt->execute([
+                'run_id' => $hashcatRunId,
+                'crack_time_s' => $runDuration,
+                'plaintext' => $plaintext,
+                'hash' => $hash,
+            ]);
+            $updated += $stmt->rowCount();
+        }
+
+        return $updated;
+    }
+
+    public function applyPotfileSha3(string $potfile, int $hashcatRunId, ?float $runDuration): int
+    {
+        if (!is_file($potfile)) {
+            throw new InvalidArgumentException("Potfile not found: {$potfile}");
+        }
+
+        $lines = file($potfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            throw new RuntimeException("Unable to read potfile {$potfile}");
+        }
+
+        $updateSql = <<<SQL
+            UPDATE hashes
+            SET cracked_at = COALESCE(cracked_at, NOW()),
+                crack_run_id = :run_id,
+                crack_time_s = COALESCE(crack_time_s, :crack_time_s),
+                crack_plaintext = :plaintext
+            WHERE sha3_hash = :hash
+        SQL;
+        $stmt = $this->pdo->prepare($updateSql);
+        $updated = 0;
+
+        foreach ($lines as $line) {
+            [$hash, $plaintext] = array_pad(explode(':', $line, 2), 2, '');
+            if ($hash === '') {
+                continue;
+            }
+            $stmt->execute([
+                'run_id' => $hashcatRunId,
+                'crack_time_s' => $runDuration,
+                'plaintext' => $plaintext,
+                'hash' => $hash,
+            ]);
+            $updated += $stmt->rowCount();
+        }
+
+        return $updated;
+    }
+
+    public function applyPotfileBlake2b(string $potfile, int $hashcatRunId, ?float $runDuration): int
+    {
+        if (!is_file($potfile)) {
+            throw new InvalidArgumentException("Potfile not found: {$potfile}");
+        }
+
+        $lines = file($potfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            throw new RuntimeException("Unable to read potfile {$potfile}");
+        }
+
+        $updateSql = <<<SQL
+            UPDATE hashes
+            SET cracked_at = COALESCE(cracked_at, NOW()),
+                crack_run_id = :run_id,
+                crack_time_s = COALESCE(crack_time_s, :crack_time_s),
+                crack_plaintext = :plaintext
+            WHERE blake2b_hash = :hash
+        SQL;
+        $stmt = $this->pdo->prepare($updateSql);
+        $updated = 0;
+
+        foreach ($lines as $line) {
+            [$hash, $plaintext] = array_pad(explode(':', $line, 2), 2, '');
+            if ($hash === '') {
+                continue;
+            }
+            // Strip $BLAKE2$ prefix if present (Hashcat adds it to potfile)
+            $hash = str_replace('$BLAKE2$', '', $hash);
+            $stmt->execute([
+                'run_id' => $hashcatRunId,
+                'crack_time_s' => $runDuration,
+                'plaintext' => $plaintext,
+                'hash' => $hash,
+            ]);
+            $updated += $stmt->rowCount();
+        }
+
+        return $updated;
+    }
+
+    public function applyPotfileArgon2id(string $potfile, int $hashcatRunId, ?float $runDuration): int
+    {
+        if (!is_file($potfile)) {
+            throw new InvalidArgumentException("Potfile not found: {$potfile}");
+        }
+
+        $lines = file($potfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if ($lines === false) {
+            throw new RuntimeException("Unable to read potfile {$potfile}");
+        }
+
+        $updateSql = <<<SQL
+            UPDATE hashes
+            SET cracked_at = COALESCE(cracked_at, NOW()),
+                crack_run_id = :run_id,
+                crack_time_s = COALESCE(crack_time_s, :crack_time_s),
+                crack_plaintext = :plaintext
+            WHERE argon2id_hash = :hash
         SQL;
         $stmt = $this->pdo->prepare($updateSql);
         $updated = 0;
