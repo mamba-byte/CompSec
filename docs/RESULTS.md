@@ -21,7 +21,7 @@ This document contains the **actual measured results** from password hashing and
 | **MD5**       | 10,000 | 0.000175 | 0.0001 | 0.0468 | 0.0002 | 1.00x (baseline) |
 | **SHA-3-256** | 10,000 | 0.000313 | 0.0002 | 0.0320 | 0.0003 | 1.79x slower |
 | **BLAKE2b**   | 10,000 | 0.000276 | 0.0002 | 0.2149 | 0.0002 | 1.58x slower |
-| **Argon2id**  | 1,000  | 126.786  | 118.82 | 214.32 | 124.35 | ~724,000x slower |
+| **Argon2id**  | 1,000  | 126.786(s)  | 118.82 (s)| 214.32(s) | 124.35(s) | ~724,000x slower |
 
 ### Key Findings
 
